@@ -1,0 +1,128 @@
+
+//////////////////Pablo Romero
+//////////////////IRB Barcelona
+//////////////////July 2019
+
+
+
+This file is a guide to do the fitting process. The current directory contains all the files mentioned in here, so the user can check which is the format of each input file. 
+
+
+
+
+NOTE: The input files are opened automatically by the program.
+
+Compilation of a C++ program: g++ -ansi -Wall -O3 "program_name"
+
+Execution of a C++ program: ./a.out
+
+
+
+
+(1) We first have to discard the structures using the ellipsoid method. To do so:
+	
+	(1.1) We run the program ellipsoid.cpp:
+
+		INPUT: "all_rg_ete_dist_nanogfl.dat": File containing all the structures. (See the format in the current directory).
+
+		OUTPUT: "Ellipsoids.out": File containing the ellipsoid corresponding to each structure. 
+
+	(1.2) We run the program evaluate.cpp:
+	
+		INPUT: "Ellipsoids.out"
+
+		OUTPUT: "Structures_keep.out": File containing that classifies the structures as accepted (1) or rejected (0).
+
+
+NOTE: The following steps have to be done ONLY for the structures we want to fitt (not those that have been discarted).
+
+
+(2) Set the Paralelization. 
+
+	(2.1) We run the program Paralel.cpp: 
+
+		INPUT: 
+		
+			-"indexs_structures.dad": File containing all the structures that we want to fitt. (SEE IN THE CURRENT 
+			DIRECTORY THE FORMAT OF THE FILE).
+
+			-"InputNCPU": Contains the number of files that the user wants to send at a time.
+
+		OUTPUT: Several files named: launch_hpfj.sbatch   where 1<=j<=N, being N the number of files user want to send at a 
+		time.
+
+
+
+(3) Run the program to perform the fitting.
+
+	To run the program the line that we need to write is: 
+
+		 for i in `seq N`; do sbatch launch_hpf$i.sbatch; done
+
+	where N is defined above. This line, compile and execute N programs that perform the fitting of the structures.  To do so, a 
+	program called "Fitting.cpp" is automatically executed. This program, requires the following files:
+
+	INPUT (of Fitting.cpp):
+
+		-"Input2.dad": Contains the name of the files that needs the program. These are:	
+
+			(a) Name of the file that Contains the localizations of the oligoSTORM. (EXAMPLE: "oligo.xy")
+			
+			(b) Name of the gen. (nanogflang, gapdh or stella)
+
+			(c) Name of the file that contains the sequences. (EXAMPLE: "seqnanog")
+	
+			(d) Name of the file that contains the localizations of the immunoSTORM. (Example: "clusters.xy")
+
+
+	OUTPUT: Several files named "RESULTSj.out" from 1<=j<=N that contain the results of the fitting. 
+
+	NOTE: For each structure, it appears the fitting of both oligo and immuno and the parameters of the best fitting. If the user saves 		these parameters will be able to represent the results graphically afterwards using "Obtain_information.cpp".
+
+
+(4) Getting the overall value:
+
+	Until now, we have several files containing the fitting for both immuno and oligo of several structures. We want to obtain a 
+	final fitting all in one file:  
+
+	To do so, we run the program "choose.cpp":
+
+	INPUT: It first asks in how many file do we have the data.
+
+	OUTPUT: "Final_RESULTS.out": Contains the final results of the fitting. 
+
+
+(5) Obtaining information (OPTIONAL)
+
+	The program "Obtain_information.cpp" allows us to get the projection of the structure in the proper plane and in the proper 	
+	reference system.
+
+
+	INPUT: "Input3.dad" Contains the following names:
+
+   	//files
+    	read >> nameOligo;
+    	read >> nameGen;
+    	read >> nameSeq;
+    	read >> nameClust;
+    	read >> nameStr;
+    	read >> nameNucle;
+
+    	//information oligo
+    	read >>  index of plane;
+    	read >> index of rot;
+    	read >> index of translation 1;
+    	read >> index of translation 2;
+
+    	//information immuno
+    	read >>  index of plane;
+    	read >> index of rot;
+    	read >> index of translation 1;
+    	read >> index of translation 2;
+
+
+
+
+
+
+ 
