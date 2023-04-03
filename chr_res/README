@@ -1,0 +1,21 @@
+//////////////////Pablo Romero
+//////////////////IRB Barcelona
+//////////////////July 2019
+
+Compilation: g++ -ansi -Wall -O3 fitting_chr.cpp
+Execute: ./a.out
+
+
+
+	Input: The program first reads the info from the file "Input.dad". This file contains 3 lines with:
+	
+		-Line 1: the number of computational structures we consider for the fitting. Every single structure must be in a 
+		different file called "ensamble.n.xyz" where n is the index number. 
+		
+		-Line 2: the name of the file with the localizations of the clusters.
+		
+		-Line 3: the name of the positions of the genes.
+	
+	
+
+
